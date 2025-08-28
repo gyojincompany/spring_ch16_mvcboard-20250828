@@ -125,6 +125,13 @@
 			<scope>provided</scope>
 		</dependency> 
 		
+		<!-- spring JDBC 설정 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.1.4.RELEASE</version>
+		</dependency>
+		
 		<!-- mysql driver -->
 		<dependency>
 			<groupId>mysql</groupId>

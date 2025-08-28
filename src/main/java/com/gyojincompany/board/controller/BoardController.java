@@ -1,5 +1,7 @@
 package com.gyojincompany.board.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -7,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gyojincompany.board.dao.BoardDao;
+import com.gyojincompany.board.dto.BoardDto;
 
 @Controller
 public class BoardController {
@@ -22,6 +25,15 @@ public class BoardController {
 		boardDao.write(request.getParameter("bname"), request.getParameter("btitle"), request.getParameter("bcontent"));
 		
 		return "redirect:boardlist";
+	}
+	
+	@RequestMapping(value = "/boardlist")
+	public String boardlist(HttpServletRequest request, Model model) {
+		BoardDao boardDao = new BoardDao();
+		List<BoardDto> bDtos = boardDao.boardlist();
+		model.addAttribute("bDtos", bDtos);
+		
+		return "boardlist";
 	}
 
 }

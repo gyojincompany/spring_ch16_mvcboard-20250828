@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.gyojincompany.board.dto.BoardDto;
 
 public class BoardDao {
 	
@@ -43,6 +47,43 @@ public class BoardDao {
 				e.printStackTrace();
 			}
 		}
+		
+	}
+	
+	public List<BoardDto> boardlist() { //DB에 있는 게시판 모든 글 목록 가져오기 메서드
+		
+		String sql = "SELECT * FROM boardtbl ORDER BY bnum DESC";
+		List<BoardDto> bDtos = new ArrayList<BoardDto>();
+		
+		
+		try {
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, username, password);
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {				
+				BoardDto bDto = new BoardDto(rs.getInt("bnum"), rs.getString("btitle"), rs.getString("bcontent"), rs.getString("bname"), rs.getInt("bhit"), rs.getString("bdate"));
+				bDtos.add(bDto);
+			}
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return bDtos;
 		
 	}
 	
