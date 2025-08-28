@@ -87,4 +87,72 @@ public class BoardDao {
 		
 	}
 	
+	//유저가 게시판 목록에서 글 제목을 클릭했을때 들어오는 요청 처리 메서드
+	public BoardDto contentView(String bnum) { //글 번호에 해당하는 글 레코드를 가져와 boardDto에 넣어서 반환하는 메서드
+		
+		upHit(bnum); //조회수 증가 함수 호출
+		
+		String sql = "SELECT * FROM boardtbl WHERE bnum=?";
+		BoardDto bDto = new BoardDto();
+		
+		try {
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, username, password);
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bnum);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {			
+				bDto = new BoardDto(rs.getInt("bnum"), rs.getString("btitle"), rs.getString("bcontent"), rs.getString("bname"), rs.getInt("bhit"), rs.getString("bdate"));				
+			}
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return bDto;
+		
+	}
+	
+	public void upHit(String bnum) { //유저가 클릭한 글번호의 조회수 증가 함수
+		
+		String sql = "UPDATE boardtbl SET bhit=bhit+1 WHERE bnum=?";
+		
+		try {
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, username, password);
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bnum);
+			
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+		
+	
+	
 }

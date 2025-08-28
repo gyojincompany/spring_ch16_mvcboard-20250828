@@ -27,7 +27,7 @@ public class BoardController {
 		return "redirect:boardlist";
 	}
 	
-	@RequestMapping(value = "/boardlist")
+	@RequestMapping(value = "/boardlist") //글 목록 보기 요청을 처리
 	public String boardlist(HttpServletRequest request, Model model) {
 		BoardDao boardDao = new BoardDao();
 		List<BoardDto> bDtos = boardDao.boardlist();
@@ -35,5 +35,22 @@ public class BoardController {
 		
 		return "boardlist";
 	}
+	
+	@RequestMapping(value = "/content_view") //게시판 글 목록에서 내용 보고 싶은 글 제목을 클릭했을때의 요청 처리
+	public String content_view(HttpServletRequest request, Model model) {
+		
+		String bnum = request.getParameter("bnum"); //유저가 클릭한 글의 번호
+		BoardDao boardDao = new BoardDao();
+		BoardDto bDto = boardDao.contentView(bnum);
+		
+		model.addAttribute("bDto", bDto);
+		
+		return "contentView";
+	}
+	
+	
+	
+	
+	
 
 }
